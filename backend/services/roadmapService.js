@@ -107,10 +107,16 @@ const roadmapTemplates = {
 };
 
 const skillAliases = {
+  java: [
+    "java",
+    "core java"
+  ],
+
   oop: [
+    "oop",
+    "oops",
     "object-oriented programming",
-    "object oriented programming",
-    "oop"
+    "object oriented programming"
   ],
 
   javascript: [
@@ -122,44 +128,48 @@ const skillAliases = {
     "react"
   ],
 
+  nextjs: [
+    "next.js",
+    "server-side rendering"
+  ],
+
+  html: [
+    "html",
+    "semantic markup"
+  ],
+
+  css: [
+    "css",
+    "flexbox",
+    "grid",
+    "responsive design"
+  ],
+
+  nodejs: [
+    "node.js",
+    "express"
+  ],
+
   mongodb: [
     "mongodb",
-    "mongoose",
-    "database"
+    "mongoose"
   ],
 
   sql: [
     "sql",
-    "mysql",
-    "database"
-  ],
+    "mysql"
+  ]
+};
 
-  java: [
-    "java",
-    "core java"
-  ],
+const normalizeSkill = (skill) => {
+  const map = {
+    "core java": "java",
+    "oops": "oop",
+    "node.js": "nodejs",
+    "next.js": "nextjs"
+  };
 
-  nextjs: [
-  "next.js",
-  "server-side rendering"
-],
-
-css: [
-  "css",
-  "flexbox",
-  "grid",
-  "responsive design"
-],
-
-html: [
-  "html",
-  "semantic markup"
-],
-
-nodejs: [
-  "node.js",
-  "express"
-]
+  return map[skill] || skill;
 };
 
 const generateRoadmap = (
@@ -201,14 +211,18 @@ const generateRoadmap = (
     .split(",")
     .map((skill) => skill.trim());
 
-  roadmap = roadmap.filter((step) => {
+ roadmap = roadmap.filter((step) => {
   const stepLower = step.toLowerCase();
 
   return !knownSkills.some((skill) => {
-    const aliases = skillAliases[skill] || [skill];
+    const normalizedSkill =
+      normalizeSkill(skill);
+
+    const aliases =
+      skillAliases[normalizedSkill] || [skill];
 
     return aliases.some((alias) =>
-      stepLower.includes(alias)
+      stepLower.includes(alias.toLowerCase())
     );
   });
 });
@@ -220,14 +234,9 @@ const generateRoadmap = (
   }
 
  if (experienceLevel.toLowerCase() === "advanced") {
-  roadmap = roadmap.filter((step) => {
-    const lowerStep = step.toLowerCase();
-
-      roadmap = roadmap.filter(
+  roadmap = roadmap.filter(
     (step) => !step.toLowerCase().includes("fundamentals")
   );
-
-  });
 
   roadmap.push(
     "Learn System Design",
