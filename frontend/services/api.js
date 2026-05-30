@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api/roadmap",
+  baseURL: "https://career-roadmap-generator-82l6.onrender.com/api/roadmap",
 });
 
 export const generateRoadmap = (data) => {
